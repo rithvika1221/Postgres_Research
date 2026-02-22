@@ -1,0 +1,167 @@
+================================================================================
+TRANSACTION SIZE EXPERIMENT - QUICK START GUIDE
+================================================================================
+
+STEP 1: PREREQUISITES
+======================
+
+On both Publisher and Subscriber VMs:
+  pip3 install psycopg2-binary openpyxl
+
+Verify PostgreSQL is running and replication is configured:
+  - Publisher: localhost:5432/pub
+  - Subscriber: localhost:5432/sub
+  - Publisher cross-VM: 172.16.0.4:5432/pub
+
+
+STEP 2: RUN THE EXPERIMENT (3 TERMINAL WINDOWS)
+=================================================
+
+TERMINAL 1 (Publisher VM) - Load Generator:
+  cd /sessions/loving-serene-pascal/mnt/Postgres_Reaserch/Postgres_Research/scripts/exp_transaction_size
+  python3 load_generator.py --output-dir ./results
+  
+  Expected: Runs 6 phases, ~12 minutes, creates tps_phase.txt
+
+
+TERMINAL 2 (Publisher VM) - Publisher Monitor:
+  cd /sessions/loving-serene-pascal/mnt/Postgres_Reaserch/Postgres_Research/scripts/exp_transaction_size
+  python3 monitor_publisher_xlsx.py --duration 780 --interval 2 --output-dir ./results
+  
+  Expected: Collects 5 sheets × ~390 samples, ~13 minutes, creates XLSX file
+
+
+TERMINAL 3 (Subscriber VM) - Subscriber Monitor:
+  cd /sessions/loving-serene-pascal/mnt/Postgres_Reaserch/Postgres_Research/scripts/exp_transaction_size
+  python3 monitor_subscriber_xlsx.py \
+    --subscriber-host localhost \
+    --publisher-crossvm-host 172.16.0.4 \
+    --duration 780 \
+    --interval 2 \
+    --output-dir ./results
+  
+  Expected: Collects 4 sheets × ~390 samples, ~13 minutes, creates XLSX file
+
+
+STEP 3: COLLECT RESULTS
+========================
+
+After all scripts finish (~13 minutes), check the output directory:
+
+  ls -lh ./results/
+
+You should see:
+  - tps_phase.txt (last phase status)
+  - publisher_metrics_txnsize_YYYYMMDD_HHMMSS.xlsx
+  - subscriber_metrics_txnsize_YYYYMMDD_HHMMSS.xlsx
+
+
+STEP 4: ANALYZE RESULTS
+========================
+
+Open the XLSX files in Excel or LibreOffice Calc:
+
+Publisher Metrics (5 sheets):
+  1. Replication_Lag: LSN lag in bytes across all phases
+  2. WAL_Stats: WAL generation (segments, bytes written)
+  3. Database_Stats: Transaction counts, tuple insert/update/delete
+  4. Connections: Client and replication connection counts
+  5. Replication_Slots: Slot states and LSN positions
+
+Subscriber Metrics (4 sheets):
+  1. Subscription_Lag: Lag measured from subscriber (via cross-VM)
+  2. Apply_Stats: Apply worker state, flush_lsn, replay_lsn
+  3. Worker_Activity: Individual apply worker processes
+  4. Table_Status: Live/dead tuples, vacuum activity
+
+All sheets include phase context: TPS Phase, Target TPS, Workers, Rows/Commit
+
+
+EXPERIMENT DESIGN
+=================
+
+6 Phases (120 seconds each = 720 seconds total):
+
+Phase 1:  1 user  ×  100 TPS ×    1 row/txn =      100 rows/sec
+Phase 2:  4 users ×  500 TPS ×   10 rows/txn =    5,000 rows/sec
+Phase 3:  8 users × 1000 TPS ×   50 rows/txn =   50,000 rows/sec
+Phase 4: 16 users × 2500 TPS ×  100 rows/txn =  250,000 rows/sec
+Phase 5: 32 users × 5000 TPS ×  500 rows/txn = 2,500,000 rows/sec
+Phase 6: 64 users × 5000 TPS × 1000 rows/txn = 5,000,000 rows/sec
+
+Each phase combines increasing concurrency, TPS, AND transaction size.
+
+
+KEY PARAMETERS
+==============
+
+Database Connections (hardcoded, can be overridden):
+  Publisher: localhost:5432, dbname=pub, user=postgres, password=Aarush@123
+  Subscriber: localhost:5432, dbname=sub, user=postgres, password=Aarush@123
+  Publisher (cross-VM): 172.16.0.4:5432, dbname=pub, user=postgres, password=Aarush@123
+
+Table: ingest_data (payload TEXT, big_payload TEXT)
+
+Rate Limiting:
+  - TPS = TRANSACTIONS per second (not rows)
+  - Token-bucket rate limiter for smooth commit pacing
+  - Each worker: (target_tps / num_workers) commits/second
+
+Monitoring:
+  - 780-second duration (captures full 720s experiment + buffer)
+  - 2-second sampling interval (default, ~390 samples per sheet)
+  - Blue header for publisher metrics
+  - Green header for subscriber metrics
+  - Frozen panes and autofilter enabled
+
+
+TROUBLESHOOTING
+===============
+
+Load generator won't start:
+  - Check PostgreSQL is running on localhost:5432
+  - Check ingest_data table exists in pub database
+  - Check psycopg2 is installed: pip3 install psycopg2-binary
+
+Monitor won't connect:
+  - Check database connectivity
+  - For subscriber monitor, verify 172.16.0.4 is reachable from subscriber VM
+  - Check credentials: user=postgres, password=Aarush@123
+
+Scripts exit early:
+  - Check available disk space
+  - Monitor for OOM or connection errors
+  - Check logs for SQL errors
+
+Excel file appears empty:
+  - Verify sampling interval allows enough data collection
+  - Try increasing --interval or running longer test
+
+
+CUSTOMIZATION
+==============
+
+Override database host:
+  python3 load_generator.py --host 192.168.1.10 --port 5432
+
+Override monitoring duration:
+  python3 monitor_publisher_xlsx.py --duration 1200 (20 minutes)
+
+Override sampling interval:
+  python3 monitor_publisher_xlsx.py --interval 5 (5 seconds between samples)
+
+Override output directory:
+  python3 load_generator.py --output-dir /tmp/results
+
+
+HELP
+====
+
+Each script has detailed help:
+  python3 load_generator.py --help
+  python3 monitor_publisher_xlsx.py --help
+  python3 monitor_subscriber_xlsx.py --help
+
+See README.md for full documentation.
+
+================================================================================
