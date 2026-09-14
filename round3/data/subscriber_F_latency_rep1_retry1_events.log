@@ -1,0 +1,4 @@
+2026-09-08T00:17:39.648100+00:00	RUN	now recording run_id=F_latency_rep1_retry1 -> C:\r3\data\subscriber_F_latency_rep1_retry1.csv
+2026-09-08T02:10:18.970187+00:00	RUN	now recording run_id=F_latency_rep1_retry1 -> C:\r3\data\subscriber_F_latency_rep1_retry1.csv
+2026-09-08T02:19:46.695270+00:00	QUERY_TOO_SLOW	[sub_row_count] did not finish within 4000 ms. That column is left empty; nothing else is affected. Logged once.
+2026-09-08T02:19:50.846716+00:00	SAMPLE_GAP	4.3s between samples

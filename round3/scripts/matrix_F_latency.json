@@ -1,0 +1,122 @@
+{
+  "family": "F_latency",
+  "description": "Latency dose-response at a fixed sub-saturation byte rate, so the ordering cannot be destroyed by saturation the way it was at 5000 TPS in the Round 2 data. Latency is injected with clumsy/WinDivert on the subscriber, on inbound packets of the replication connection only, so it cannot throttle the load generator's own connections to the publisher. The byte rate is 6 MB/s at EVERY level: the rate must be identical across levels for the dose-response to mean anything, and 6 MB/s is the highest rate at which the 200 ms level still fits inside clumsy's 2000-packet hold buffer with a safety margin (see clumsy_buffer_limit). The RTT ladder is 0/32/50/100/150/200 ms, set by what the tool can actually produce - see clumsy_calibration, which measured a hard floor of about 31 ms.",
+  "clumsy_filter": "inbound and ip.SrcAddr == 10.0.1.4 and tcp.SrcPort == 5432",
+  "clumsy_filter_note": "10.0.1.4 is the publisher's private address on the Azure VNet. It must match the host= in the subscriber's pg_subscription.subconninfo, because that is the address the WAL packets actually carry. Printed verbatim at each latency gate.",
+  "levels": [
+    {
+      "level_id": "F01",
+      "label": "0 ms added RTT @ 6 MB/s  (control, clumsy stopped)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 0,
+      "clumsy_lag_ms": null,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "F02",
+      "label": "32 ms added RTT @ 6 MB/s  (clumsy Lag 1)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 32,
+      "clumsy_lag_ms": 1,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "F03",
+      "label": "50 ms added RTT @ 6 MB/s  (clumsy Lag 19)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 50,
+      "clumsy_lag_ms": 19,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "F04",
+      "label": "100 ms added RTT @ 6 MB/s  (clumsy Lag 69)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 100,
+      "clumsy_lag_ms": 69,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "F05",
+      "label": "150 ms added RTT @ 6 MB/s  (clumsy Lag 119)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 150,
+      "clumsy_lag_ms": 119,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "F06",
+      "label": "200 ms added RTT @ 6 MB/s  (clumsy Lag 169)",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "network_latency_ms": 200,
+      "clumsy_lag_ms": 169,
+      "duration_sec": 360
+    }
+  ],
+  "retargeted_from_calibration": {
+    "source": "A_calibration_rep1",
+    "previous_target_mbps": 20,
+    "interim_target_mbps": 15,
+    "new_target_mbps": 6,
+    "publisher_ceiling_note": "see matrix_P_probe.json"
+  },
+  "clumsy_buffer_limit": {
+    "why": "clumsy holds delayed packets in a fixed-size ring. src/lag.c defines KEEP_AT_MOST 2000 packets and FLUSH_WHEN_FULL 800. When the ring is full clumsy SENDS the held packets immediately rather than dropping them, so the emulated latency silently collapses instead of failing loudly. Nothing in the clumsy UI reports this.",
+    "arithmetic": "in-flight packets = (byte rate / 1448 B per full segment) * (added RTT in seconds)",
+    "at_15_mb_per_sec": {
+      "100_ms": 1086,
+      "200_ms": 2172,
+      "verdict": "200 ms exceeds KEEP_AT_MOST outright and 100 ms has no margin for controller overshoot"
+    },
+    "at_6_mb_per_sec": {
+      "100_ms": 434,
+      "200_ms": 869,
+      "verdict": "worst case is 43% of the ring, and still only 56% if the closed loop transiently overshoots by 30%"
+    },
+    "detection": "compare pg_stat_replication.write_lag against F01. If the increase is materially less than network_latency_ms, the ring is flushing early and the level must be re-run at a lower byte rate. Idle ping will NOT detect this and does not even see the injected delay, because the clumsy filter matches only TCP packets of the replication connection."
+  },
+  "clumsy_calibration": {
+    "measured_on": "2026-09-07, r3-sub, check_latency.py, 60 probes per point",
+    "observations": [
+      {
+        "clumsy_lag_ms": 0,
+        "measured_added_rtt_ms": 0.08
+      },
+      {
+        "clumsy_lag_ms": 10,
+        "measured_added_rtt_ms": 40.4
+      },
+      {
+        "clumsy_lag_ms": 50,
+        "measured_added_rtt_ms": 80.7
+      },
+      {
+        "clumsy_lag_ms": 170,
+        "measured_added_rtt_ms": 201.77
+      }
+    ],
+    "model": "measured_added_rtt_ms = clumsy_lag_ms + 31.0, for any NON-ZERO lag; a lag of 0 adds nothing at all (0.08 ms)",
+    "cause": "Quantisation, not overhead. clumsy running with Lag 0 costs 0.08 ms, so being in the packet path is free. Any non-zero lag is rounded up by about two Windows timer ticks (2 x 15.625 = 31.25 ms), which matches the measured 31.0 to within a millisecond and explains why the variance is only +/-0.5 ms rather than jittering.",
+    "consequence": "The smallest achievable non-zero added RTT is about 31 ms. The original 10 ms and 25 ms levels are UNATTAINABLE with this tool on this platform and were removed; the ladder now starts at the floor itself, which is worth reporting as a limitation of packet-level latency injection on Windows.",
+    "procedure": "clumsy_lag_ms is what to type into clumsy. network_latency_ms is what that produces and what the gate asks you to confirm. Verify each level with check_latency.py before confirming, and record the MEASURED median - that, not the setting, is the independent variable in the paper.",
+    "configuration_verified": "Verified from a screenshot of the running clumsy 0.3 window on 8 Sep 2026: filter 'inbound and ip.SrcAddr == 10.0.1.4 and tcp.SrcPort == 5432', filtering started, Lag ticked with Inbound only, every other function unticked. The 31 ms floor and the throughput collapse were therefore properties of the tool as correctly configured, not misconfiguration. Note that clumsy 0.3 has NO Chance control for Lag - Lag delays every matched packet unconditionally."
+  }
+}

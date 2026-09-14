@@ -1,0 +1,131 @@
+{
+  "family": "B_concurrency",
+  "description": "Reviewer major issue 7b. Client count swept at a FIXED measured WAL rate, so concurrency varies and delivered bytes do not. Two blocks, because the probe showed one client can deliver only 11.6 MB/s while the subscriber applies at ~48 MB/s: no single rate can be held by both one client and sixty-four AND sit near capacity. Block 1 holds 8 MB/s across the full 1-64 sweep - the clean concurrency experiment, deep below saturation. Block 2 holds 40 MB/s across 8-64 clients only, near the apply knee, where queueing actually matters. Above-knee concurrency is NOT attainable on this hardware: the publisher tops out at ~50 MB/s at ten rows per commit and the subscriber applies at ~48, so the machine cannot overload itself by more than about 20% - a hardware result worth stating in Methods rather than a gap in the design.",
+  "retargeted_from_probe": {
+    "source": "run_report_P_probe_rep1.md",
+    "one_client_ceiling_mb_per_sec": 11.575,
+    "eight_client_ceiling_mb_per_sec": 49.419,
+    "apply_knee_mb_per_sec": 48,
+    "block1_target": 8,
+    "block2_target": 40,
+    "block2_excludes": "1 and 4 clients: they reach only 11.6 and 38.6 MB/s"
+  },
+  "levels": [
+    {
+      "level_id": "B01",
+      "label": "1 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 1,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B02",
+      "label": "4 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 4,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B03",
+      "label": "8 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 8,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B04",
+      "label": "16 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B05",
+      "label": "32 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 32,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B06",
+      "label": "64 clients @ 8 MB/s (sub-saturation, full sweep)",
+      "clients": 64,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 8,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "B07",
+      "label": "8 clients @ 30 MB/s (near the apply knee)",
+      "clients": 8,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 30,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "B08",
+      "label": "16 clients @ 30 MB/s (near the apply knee)",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 30,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "B09",
+      "label": "32 clients @ 30 MB/s (near the apply knee)",
+      "clients": 32,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 30,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "B10",
+      "label": "64 clients @ 30 MB/s (near the apply knee)",
+      "clients": 64,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 30,
+      "duration_sec": 240
+    }
+  ],
+  "retarget_history": [
+    {
+      "utc": "2026-09-12T18:53:28Z",
+      "reason": "probe ceiling 49.4 MB/s at 8-16 clients, but family A's A08 measured the same shape at 44.3; 0.70 headroom on the minimum observation gives 30",
+      "new_target_wal_mbps": 30.0,
+      "levels": [
+        {
+          "level_id": "B07",
+          "was_target_wal_mbps": 40
+        },
+        {
+          "level_id": "B08",
+          "was_target_wal_mbps": 40
+        },
+        {
+          "level_id": "B09",
+          "was_target_wal_mbps": 40
+        },
+        {
+          "level_id": "B10",
+          "was_target_wal_mbps": 40
+        }
+      ],
+      "tool": "set_matrix_target.py"
+    }
+  ]
+}

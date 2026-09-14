@@ -1,0 +1,105 @@
+{
+  "family": "D_rowsize",
+  "description": "Row size at a fixed measured WAL rate, separating bytes-per-row from bytes-per-second exactly as family C separates batching from volume. 10 MB/s is 70% of the 14.68 MB/s the probe measured for 100-byte rows at one row per commit, which is this family's binding level. Probe level P08 showed 64 clients deliver no more than 16 for that shape, so the constraint is per-commit cost, not concurrency.",
+  "levels": [
+    {
+      "level_id": "D01",
+      "label": "100 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "D02",
+      "label": "1000 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "D03",
+      "label": "10000 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 10000,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "D04",
+      "label": "50000 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 50000,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "D05",
+      "label": "100000 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100000,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "D06",
+      "label": "250000 B rows @ 6 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 250000,
+      "target_wal_mbps": 6,
+      "duration_sec": 360
+    }
+  ],
+  "retargeted_from_calibration": {
+    "source": "A_calibration_rep1",
+    "previous_target_mbps": 45,
+    "new_target_mbps": 7,
+    "publisher_ceiling_note": "see matrix_P_probe.json"
+  },
+  "retargeted_from_probe": {
+    "source": "P07/P08",
+    "measured_100B_ceiling": 14.682,
+    "note": "64 clients gave 14.29 - client count does not lift it"
+  },
+  "retarget_history": [
+    {
+      "utc": "2026-09-12T18:53:28Z",
+      "reason": "the 100 B row level must stay under the decode limit: 6 MB/s at 100 B/row is ~15.7k commits/s against a bracketed ceiling of 16.0-17.2k",
+      "new_target_wal_mbps": 6.0,
+      "levels": [
+        {
+          "level_id": "D01",
+          "was_target_wal_mbps": 10
+        },
+        {
+          "level_id": "D02",
+          "was_target_wal_mbps": 10
+        },
+        {
+          "level_id": "D03",
+          "was_target_wal_mbps": 10
+        },
+        {
+          "level_id": "D04",
+          "was_target_wal_mbps": 10
+        },
+        {
+          "level_id": "D05",
+          "was_target_wal_mbps": 10
+        },
+        {
+          "level_id": "D06",
+          "was_target_wal_mbps": 10
+        }
+      ],
+      "tool": "set_matrix_target.py"
+    }
+  ]
+}

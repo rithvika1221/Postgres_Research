@@ -1,0 +1,3 @@
+2026-09-13T22:05:01.148992+00:00	RUN	now recording run_id=F_lat_northeurope_rep3 -> C:\r3\data\subscriber_F_lat_northeurope_rep3.csv
+2026-09-13T22:05:01.154107+00:00	LEVEL	F01 -> idle (state=idle)
+2026-09-13T22:05:08.149539+00:00	LEVEL	idle -> F01 (state=drain)

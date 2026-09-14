@@ -1,0 +1,7 @@
+2026-09-13T02:15:36.558564+00:00	RUN	now recording run_id=E_duration_rep1 -> C:\r3\data\publisher_E_duration_rep1.csv
+2026-09-13T02:15:36.558564+00:00	LEVEL	D04 -> idle (state=idle)
+2026-09-13T02:15:40.578542+00:00	LEVEL	idle -> E01 (state=drain)
+2026-09-13T02:18:20.935329+00:00	LEVEL	E01 -> E02 (state=reset)
+2026-09-13T02:24:03.831375+00:00	LEVEL	E02 -> E03 (state=reset)
+2026-09-13T02:34:48.090242+00:00	LEVEL	E03 -> E04 (state=reset)
+2026-09-13T02:55:33.184827+00:00	LEVEL	E04 -> E05 (state=reset)

@@ -1,0 +1,9 @@
+2026-09-13T03:26:18.140338+00:00	RUN	now recording run_id=E_duration_rep2 -> C:\r3\data\publisher_E_duration_rep2.csv
+2026-09-13T03:26:18.140338+00:00	LEVEL	E05 -> idle (state=idle)
+2026-09-13T03:35:27.730388+00:00	LEVEL	idle -> E01 (state=reset)
+2026-09-13T03:38:10.079657+00:00	LEVEL	E01 -> E02 (state=reset)
+2026-09-13T03:43:52.668372+00:00	LEVEL	E02 -> E03 (state=reset)
+2026-09-13T03:54:35.720470+00:00	LEVEL	E03 -> E04 (state=reset)
+2026-09-13T04:15:19.498024+00:00	LEVEL	E04 -> E05 (state=reset)
+2026-09-13T04:46:04.855181+00:00	STOP	stop file present
+2026-09-13T04:46:04.855181+00:00	SUMMARY	samples=34076 elapsed=34130s events={"START": 1, "WAL_TIMING_MODE": 1, "DB_CONNECTED": 1, "RUN": 12, "LEVEL": 87, "REPL_STATE": 1, "SLOT_STATUS": 1, "STOP": 1}

@@ -1,0 +1,24 @@
+{
+  "family": "P_probe",
+  "description": "Feasibility probe, run after calibration and before the unattended campaign. Calibration measured the publisher's ceiling only at 16 clients, so it cannot say what one client or sixty-four can deliver, and it never tested a 100-byte row or a 1000-row commit. Families B, C and D need those numbers to choose a fixed byte rate that every level in the family can actually hold. Every level here is unthrottled: the number that matters is measured_wal_mb_per_sec, which IS the ceiling for that combination.",
+  "levels": [
+    {"level_id": "P01", "label": "1 client, 10 rows/commit - the binding constraint for family B",
+     "clients": 1,  "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P02", "label": "4 clients, 10 rows/commit",
+     "clients": 4,  "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P03", "label": "8 clients, 10 rows/commit",
+     "clients": 8,  "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P04", "label": "16 clients, 10 rows/commit - cross-check against A08",
+     "clients": 16, "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P05", "label": "32 clients, 10 rows/commit",
+     "clients": 32, "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P06", "label": "64 clients, 10 rows/commit",
+     "clients": 64, "rows_per_commit": 10,   "row_bytes": 1000, "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P07", "label": "100-byte rows, 1 row/commit - the binding constraint for family D",
+     "clients": 16, "rows_per_commit": 1,    "row_bytes": 100,  "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P08", "label": "100-byte rows at 64 clients - can more clients lift family D?",
+     "clients": 64, "rows_per_commit": 1,    "row_bytes": 100,  "unthrottled": true, "duration_sec": 45},
+    {"level_id": "P09", "label": "1000 rows/commit - the far end of family C",
+     "clients": 16, "rows_per_commit": 1000, "row_bytes": 1000, "unthrottled": true, "duration_sec": 45}
+  ]
+}

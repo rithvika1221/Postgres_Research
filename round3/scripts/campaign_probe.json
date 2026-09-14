@@ -1,0 +1,8 @@
+{
+  "name": "round3_probe",
+  "description": "Stage 1b: measure the publisher's delivery ceiling at the client counts and shapes that calibration did not cover. Read the measured MB/s per level, then set the fixed target rates for families B, C and D.",
+  "families": [
+    {"family": "P_probe", "config": "matrix_P_probe.json", "repeats": [1],
+     "seeds": {"1": 1011}, "no_randomise": true, "max_run_seconds": 3600}
+  ]
+}

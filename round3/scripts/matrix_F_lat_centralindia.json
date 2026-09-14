@@ -1,0 +1,42 @@
+{
+  "family": "F_lat_centralindia",
+  "description": "Family F, centralindia. Replication lag against REAL network round-trip time: the subscriber is a physically separate machine in the centralindia Azure region, so the 201.6 ms is genuine inter-region latency, not emulation. Nothing is injected and nothing needs calibrating. The offered load is 6 MB/s, identical in every region and far below both the publisher ceiling (23.4 MB/s at one row per commit) and the apply knee (~48 MB/s), so RTT is the only quantity that differs between the points of this dose-response.",
+  "rtt_provenance": {
+    "measured_median_ms": 201.6,
+    "how": "run_region.py, 200 application-level round trips (SELECT 1) issued FROM THE PUBLISHER to the centralindia subscriber on one already-established connection over the peered VNet, so TCP and TLS setup are not counted. Median reported. The path is the same one replication uses, traversed in the opposite direction; measuring from the publisher is what allows the whole region run to be one command.",
+    "note": "This replaces clumsy/WinDivert injection, which was measured on this testbed to have a ~31 ms quantisation floor and a throughput ceiling that varied eightfold across repeats of one condition. See clumsy_calibration.json - it is reported as a Methods limitation, not used as an instrument.",
+    "measured_from": "publisher"
+  },
+  "held_constant": {
+    "subscription_name": "mysub",
+    "copy_data": false,
+    "streaming": "off",
+    "binary": false,
+    "synchronous_commit": "off",
+    "publisher": "unchanged, centralus",
+    "active_slots_during_run": 1
+  },
+  "hardware": {
+    "vm_size": "Standard_D8ads_v6",
+    "data_disk_caching": "ReadWrite",
+    "measured_apply_mbps": 43.3,
+    "offered_load_mbps": 6,
+    "headroom_x": 7.2,
+    "duration_sec": 60,
+    "duration_is_paper_default": false,
+    "how_measured": "preflight_region.py, run ON THIS SUBSCRIBER before the campaign. It requires at least 4x the offered load and refuses to give a GO below that.",
+    "note": "VM sizes are not identical across regions - see subscriber_hardware in the campaign record and the Methods limitation. vCPU count (8) and memory (32 GiB) ARE identical; the generation and processor family are not. Every other software-side quantity in held_constant above IS identical and was verified per region by preflight_region.py."
+  },
+  "levels": [
+    {
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 6,
+      "duration_sec": 60,
+      "level_id": "F01",
+      "label": "201.6 ms real RTT @ 6 MB/s (centralindia)",
+      "network_latency_ms": 201.6
+    }
+  ]
+}

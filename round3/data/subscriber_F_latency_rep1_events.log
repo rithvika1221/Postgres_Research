@@ -1,0 +1,10 @@
+2026-09-07T23:24:05.883080+00:00	RUN	now recording run_id=F_latency_rep1 -> C:\r3\data\subscriber_F_latency_rep1.csv
+2026-09-07T23:24:08.886604+00:00	LEVEL	idle -> F01 (state=awaiting_latency)
+2026-09-07T23:32:42.383260+00:00	LEVEL	F01 -> F02 (state=awaiting_latency)
+2026-09-08T00:15:39.564686+00:00	LEVEL	F02 -> idle (state=idle)
+2026-09-08T00:28:59.975404+00:00	RUN	now recording run_id=F_latency_rep1 -> C:\r3\data\subscriber_F_latency_rep1.csv
+2026-09-08T00:29:02.977196+00:00	LEVEL	idle -> F01 (state=awaiting_latency)
+2026-09-08T00:36:10.405107+00:00	LEVEL	F01 -> F02 (state=awaiting_latency)
+2026-09-08T00:43:55.898916+00:00	LEVEL	F02 -> F03 (state=awaiting_latency)
+2026-09-08T00:59:02.699897+00:00	LEVEL	F03 -> F04 (state=awaiting_latency)
+2026-09-08T02:08:18.861883+00:00	LEVEL	F04 -> idle (state=idle)

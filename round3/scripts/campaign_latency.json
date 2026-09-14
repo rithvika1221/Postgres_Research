@@ -1,0 +1,21 @@
+{
+  "name": "round3_latency",
+  "description": "Family F only. ATTENDED - clumsy must be set by hand on the subscriber between levels. Run this separately, after the unattended campaign has finished. With latency_gate on, the orchestrator pauses before every level and waits for you to write the millisecond value into C:\\r3\\LATENCY_SET; it refuses to start a level on any other value, so a forgotten clumsy change cannot silently produce a clean-looking wrong level.",
+  "families": [
+    {
+      "family": "F_latency",
+      "config": "matrix_F_latency.json",
+      "repeats": [
+        1,
+        2
+      ],
+      "seeds": {
+        "1": 1011,
+        "2": 2027
+      },
+      "no_randomise": true,
+      "latency_gate": true,
+      "max_run_seconds": 21600
+    }
+  ]
+}

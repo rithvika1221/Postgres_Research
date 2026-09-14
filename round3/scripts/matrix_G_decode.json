@@ -1,0 +1,80 @@
+{
+  "family": "G_decode",
+  "description": "Find the publisher's LOGICAL DECODING limit in transactions per second. Calibration A01-A06 held 8,000 commits/s at one row per commit with a median send lag of essentially zero; A07 unthrottled reached 17,233 commits/s and carried a MEDIAN send lag of 47.8 MB - 81 percent of the 58.9 MB total pipeline lag. So at small batch sizes the binding constraint is pgoutput decoding on the PUBLISHER, not apply on the subscriber, and the limit lies somewhere in the 8,000-17,200 transactions per second that the sweep jumped over. This family measures it. Two levels repeat the shape at 100-byte rows, because decoding cost has a per-byte component as well as a per-transaction one and family D's first level runs at that row size.",
+  "why_it_matters": "C01 needs 10,617 commits/s to hold 16 MB/s at one row per commit, and D01 needs 11,532 to hold 7 MB/s at 100-byte rows. Both sit inside the unmeasured band. Guessing either one wrong spends 4.5 hours of campaign on levels whose closed loop is railed against a ceiling.",
+  "read_it_like_this": "For each level compare the MEDIAN send_lag_bytes in publisher_G_decode_rep1.csv against the median replay_lag_bytes. While decoding keeps up, median send lag stays near zero and the total lag is whatever the subscriber is carrying. The decode limit is the commit rate at which median send lag starts to grow without bound.",
+  "levels": [
+    {
+      "level_id": "G07",
+      "label": "10,000 commits/s, 1 row/commit, 100-byte rows",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100,
+      "commit_rate": 10000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G05",
+      "label": "12,000 commits/s, 100-byte rows - D01's operating point",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100,
+      "commit_rate": 12000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G08",
+      "label": "14,000 commits/s, 1 row/commit, 100-byte rows",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100,
+      "commit_rate": 14000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G06",
+      "label": "16,000 commits/s, 100-byte rows",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 100,
+      "commit_rate": 16000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G01",
+      "label": "10,000 commits/s, 1 row/commit, 1000-byte rows - C01's operating point",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 10000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G02",
+      "label": "12,000 commits/s, 1 row/commit, 1000-byte rows",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 12000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G03",
+      "label": "14,000 commits/s, 1 row/commit, 1000-byte rows",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 14000,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "G04",
+      "label": "16,000 commits/s, 1 row/commit, 1000-byte rows - just under A07",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 16000,
+      "duration_sec": 120
+    }
+  ]
+}

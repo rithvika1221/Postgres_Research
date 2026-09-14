@@ -1,0 +1,57 @@
+{
+  "family": "E_duration",
+  "description": "Reviewer major issue 5. One workload held for increasing durations, each from a drained start. Answers whether a short-phase mean is transportable to a long phase. 32 MB/s is just below the measured apply knee (~38 MB/s) so the backlog stays bounded and the comparison is about steady state rather than runaway growth - at an above-capacity rate the 30-minute level would accumulate several gigabytes and the answer would be trivial.",
+  "levels": [
+    {
+      "level_id": "E01",
+      "label": "2 min @ 32 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 32,
+      "duration_sec": 120
+    },
+    {
+      "level_id": "E02",
+      "label": "5 min @ 32 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 32,
+      "duration_sec": 300
+    },
+    {
+      "level_id": "E03",
+      "label": "10 min @ 32 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 32,
+      "duration_sec": 600
+    },
+    {
+      "level_id": "E04",
+      "label": "20 min @ 32 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 32,
+      "duration_sec": 1200
+    },
+    {
+      "level_id": "E05",
+      "label": "30 min @ 32 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 32,
+      "duration_sec": 1800
+    }
+  ],
+  "retargeted_from_calibration": {
+    "source": "A_calibration_rep1",
+    "previous_target_mbps": 45,
+    "new_target_mbps": 32,
+    "publisher_ceiling_note": "see matrix_P_probe.json"
+  }
+}

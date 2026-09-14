@@ -1,0 +1,11 @@
+2026-09-12T21:15:18.650428+00:00	RUN	now recording run_id=B_concurrency_rep3 -> C:\r3\data\publisher_B_concurrency_rep3.csv
+2026-09-12T21:15:21.667259+00:00	LEVEL	idle -> B10 (state=reset)
+2026-09-12T21:20:06.208014+00:00	LEVEL	B10 -> B01 (state=reset)
+2026-09-12T21:26:48.260932+00:00	LEVEL	B01 -> B04 (state=reset)
+2026-09-12T21:33:29.636958+00:00	LEVEL	B04 -> B02 (state=drain)
+2026-09-12T21:40:11.094614+00:00	LEVEL	B02 -> B05 (state=drain)
+2026-09-12T21:46:51.488077+00:00	LEVEL	B05 -> B03 (state=reset)
+2026-09-12T21:53:32.911151+00:00	LEVEL	B03 -> B08 (state=drain)
+2026-09-12T21:58:14.425641+00:00	LEVEL	B08 -> B06 (state=drain)
+2026-09-12T22:04:56.866019+00:00	LEVEL	B06 -> B07 (state=reset)
+2026-09-12T22:09:38.304815+00:00	LEVEL	B07 -> B09 (state=reset)

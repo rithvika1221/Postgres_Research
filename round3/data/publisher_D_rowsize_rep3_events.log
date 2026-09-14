@@ -1,0 +1,8 @@
+2026-09-13T01:35:25.678817+00:00	RUN	now recording run_id=D_rowsize_rep3 -> C:\r3\data\publisher_D_rowsize_rep3.csv
+2026-09-13T01:35:25.679841+00:00	LEVEL	D04 -> idle (state=idle)
+2026-09-13T01:35:28.680820+00:00	LEVEL	idle -> D02 (state=reset)
+2026-09-13T01:42:09.954696+00:00	LEVEL	D02 -> D06 (state=reset)
+2026-09-13T01:48:51.160356+00:00	LEVEL	D06 -> D05 (state=reset)
+2026-09-13T01:55:32.371865+00:00	LEVEL	D05 -> D01 (state=reset)
+2026-09-13T02:02:13.869992+00:00	LEVEL	D01 -> D03 (state=drain)
+2026-09-13T02:08:55.154713+00:00	LEVEL	D03 -> D04 (state=reset)

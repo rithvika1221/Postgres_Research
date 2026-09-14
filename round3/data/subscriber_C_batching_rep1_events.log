@@ -1,0 +1,8 @@
+2026-09-12T22:14:22.752413+00:00	RUN	now recording run_id=C_batching_rep1 -> C:\r3\data\subscriber_C_batching_rep1.csv
+2026-09-12T22:14:22.752413+00:00	LEVEL	B09 -> idle (state=idle)
+2026-09-12T22:14:25.754623+00:00	LEVEL	idle -> C02 (state=reset)
+2026-09-12T22:21:07.515279+00:00	LEVEL	C02 -> C06 (state=reset)
+2026-09-12T22:27:50.315223+00:00	LEVEL	C06 -> C01 (state=reset)
+2026-09-12T22:34:32.014369+00:00	LEVEL	C01 -> C05 (state=drain)
+2026-09-12T22:41:14.259573+00:00	LEVEL	C05 -> C04 (state=drain)
+2026-09-12T22:47:56.643787+00:00	LEVEL	C04 -> C03 (state=drain)

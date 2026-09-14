@@ -1,0 +1,75 @@
+{
+  "name": "round3_bcde",
+  "description": "Families B-E only, for the re-run on the CORRECTED subscriber configuration. Family A is deliberately absent: run it first via -Stage calibration, read the new ceiling and apply knee, retarget B and E from them, then run this.",
+  "notes": [
+    "Why this file exists rather than 'campaign.json --resume':",
+    "supervisor.py keys its resume checkpoint on the campaign NAME.",
+    "campaign_calibration.json is 'round3_calibration' and campaign.json is",
+    "'round3_full', so --resume on campaign.json finds no checkpoint for",
+    "'round3_full', logs 'starting fresh', and re-runs family A - about 50",
+    "minutes of load for a result you already have. Splitting the campaign",
+    "removes the question instead of documenting it.",
+    "--resume still works WITHIN this campaign if it is interrupted."
+  ],
+  "families": [
+    {
+      "family": "B_concurrency",
+      "config": "matrix_B_concurrency.json",
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "seeds": {
+        "1": 1011,
+        "2": 2027,
+        "3": 3041
+      },
+      "max_run_seconds": 14400
+    },
+    {
+      "family": "C_batching",
+      "config": "matrix_C_batching.json",
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "seeds": {
+        "1": 1011,
+        "2": 2027,
+        "3": 3041
+      },
+      "max_run_seconds": 10800
+    },
+    {
+      "family": "D_rowsize",
+      "config": "matrix_D_rowsize.json",
+      "repeats": [
+        1,
+        2,
+        3
+      ],
+      "seeds": {
+        "1": 1011,
+        "2": 2027,
+        "3": 3041
+      },
+      "max_run_seconds": 10800
+    },
+    {
+      "family": "E_duration",
+      "config": "matrix_E_duration.json",
+      "repeats": [
+        1,
+        2
+      ],
+      "seeds": {
+        "1": 1011,
+        "2": 2027
+      },
+      "no_randomise": true,
+      "max_run_seconds": 14400
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "family": "A_calibration",
+  "description": "Locate the measured WAL ceiling on THIS hardware. Levels 1-6 sweep commit rate at one row per commit, which characterises the low-volume regime and finds the commit-rate ceiling. Levels 7-10 remove the rate limit entirely and raise batch size, which is what actually pushes bytes hard enough to reach the apply-capacity ceiling - a commit-rate sweep alone tops out around 10 MB/s and would never find it. Read the highest measured_wal_mb_per_sec where exceeded_capacity is still false, and retarget matrices B-F from it.",
+  "levels": [
+    {
+      "level_id": "A01",
+      "label": "250 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 250,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A02",
+      "label": "500 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 500,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A03",
+      "label": "1000 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 1000,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A04",
+      "label": "2000 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 2000,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A05",
+      "label": "4000 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 4000,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A06",
+      "label": "8000 commits/s open loop, 1 row/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "commit_rate": 8000,
+      "duration_sec": 240
+    },
+    {
+      "level_id": "A07",
+      "label": "unthrottled, 1 rows/commit",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "duration_sec": 180
+    },
+    {
+      "level_id": "A08",
+      "label": "unthrottled, 10 rows/commit",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "duration_sec": 150
+    },
+    {
+      "level_id": "A09",
+      "label": "unthrottled, 50 rows/commit",
+      "clients": 16,
+      "rows_per_commit": 50,
+      "row_bytes": 1000,
+      "duration_sec": 150
+    },
+    {
+      "level_id": "A10",
+      "label": "unthrottled, 200 rows/commit",
+      "clients": 16,
+      "rows_per_commit": 200,
+      "row_bytes": 1000,
+      "duration_sec": 150
+    }
+  ]
+}

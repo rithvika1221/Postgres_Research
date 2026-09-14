@@ -1,0 +1,18 @@
+{
+  "name": "round3_calibration",
+  "description": "Stage 1 only: locate the measured WAL ceiling. Read the result, retarget matrices B-F, then run the full campaign with --resume.",
+  "families": [
+    {
+      "family": "A_calibration",
+      "config": "matrix_A_calibration.json",
+      "repeats": [
+        1
+      ],
+      "seeds": {
+        "1": 1011
+      },
+      "no_randomise": true,
+      "max_run_seconds": 7200
+    }
+  ]
+}

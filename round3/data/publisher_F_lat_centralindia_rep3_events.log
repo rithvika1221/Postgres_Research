@@ -1,0 +1,5 @@
+2026-09-13T22:26:59.726321+00:00	RUN	now recording run_id=F_lat_centralindia_rep3 -> C:\r3\data\publisher_F_lat_centralindia_rep3.csv
+2026-09-13T22:26:59.726321+00:00	LEVEL	F01 -> idle (state=idle)
+2026-09-13T22:27:06.767730+00:00	LEVEL	idle -> F01 (state=reset)
+2026-09-13T22:33:50.255647+00:00	STOP	stop file present
+2026-09-13T22:33:50.255647+00:00	SUMMARY	samples=1230 elapsed=1232s events={"START": 1, "WAL_TIMING_MODE": 1, "DB_CONNECTED": 1, "RUN": 4, "LEVEL": 6, "REPL_STATE": 1, "SLOT_STATUS": 1, "STOP": 1}

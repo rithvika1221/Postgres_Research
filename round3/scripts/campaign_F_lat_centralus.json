@@ -1,0 +1,18 @@
+{
+  "name": "round3_F_lat_centralus",
+  "description": "Family F against the centralus subscriber. Fully UNATTENDED - there is nothing to set between levels because the latency is the network's own. Point R3_SUB_DSN at this region's subscriber and make sure every OTHER subscription is disabled first, or the publisher is feeding more than one standby and the offered load is not what it says.",
+  "families": [
+    {
+      "family": "F_lat_centralus",
+      "config": "matrix_F_lat_centralus.json",
+      "repeats": [
+        1
+      ],
+      "seeds": {
+        "1": 1011
+      },
+      "no_randomise": true,
+      "max_run_seconds": 5400
+    }
+  ]
+}

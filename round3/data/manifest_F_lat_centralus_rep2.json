@@ -1,0 +1,1012 @@
+{
+  "run_id": "F_lat_centralus_rep2",
+  "family": "F_lat_centralus",
+  "pg_version": "18.6",
+  "description": "Family F, centralus. Replication lag against REAL network round-trip time: the subscriber is a physically separate machine in the centralus Azure region, so the 0.1 ms is genuine inter-region latency, not emulation. Nothing is injected and nothing needs calibrating. The offered load is 6 MB/s, identical in every region. That it sits far below saturation is established per region by preflight_region.py, which measures this subscriber's sustained apply throughput before the campaign and requires at least four times the offered load - see the hardware block. RTT is the only quantity that differs between the points of this dose-response.",
+  "repeat": 2,
+  "seed": 2027,
+  "randomised": false,
+  "level_order": [
+    "F01"
+  ],
+  "host": "r3-pub",
+  "started_utc": "2026-09-13T21:15:35.446146+00:00",
+  "config_file": "C:\\r3\\scripts\\matrix_F_lat_centralus.json",
+  "config_sha256": "7bd029f29de63b8c12ba13b392afb291dbfd91d6bb47e7a457cc9984dd2d952c",
+  "config_contents": {
+    "family": "F_lat_centralus",
+    "description": "Family F, centralus. Replication lag against REAL network round-trip time: the subscriber is a physically separate machine in the centralus Azure region, so the 0.1 ms is genuine inter-region latency, not emulation. Nothing is injected and nothing needs calibrating. The offered load is 6 MB/s, identical in every region. That it sits far below saturation is established per region by preflight_region.py, which measures this subscriber's sustained apply throughput before the campaign and requires at least four times the offered load - see the hardware block. RTT is the only quantity that differs between the points of this dose-response.",
+    "superseded_capacity_figures": {
+      "note": "Earlier drafts of this description cited an apply knee of ~48 MB/s and a publisher ceiling of 23.4 MB/s from the family A calibration. The apply-knee figure is WITHDRAWN: every family A-E run was executed against a subscriber running stock PostgreSQL defaults - shared_buffers 128MB against the specified 8GB, checkpoint_timeout 5min against 15min, track_io_timing off - which was discovered and corrected before family F ran. Each run's manifest records the subscriber settings it actually ran under, so this is checkable rather than asserted.",
+      "publisher_ceiling_mbps": 23.4,
+      "publisher_ceiling_status": "retained. It is a commit-rate bound measured on the publisher (15,844 commits/s at one row per commit) and does not depend on the subscriber's configuration.",
+      "apply_knee_mbps_withdrawn": 48.0,
+      "replaced_by": "measured_apply_mbps in the hardware block of this file, measured on THIS subscriber in its corrected configuration"
+    },
+    "rtt_provenance": {
+      "measured_median_ms": 0.1,
+      "how": "run_region.py, 200 application-level round trips (SELECT 1) issued FROM THE PUBLISHER to the centralus subscriber on one already-established connection over the peered VNet, so TCP and TLS setup are not counted. Median reported. The path is the same one replication uses, traversed in the opposite direction; measuring from the publisher is what allows the whole region run to be one command.",
+      "note": "This replaces clumsy/WinDivert injection, which was measured on this testbed to have a ~31 ms quantisation floor and a throughput ceiling that varied eightfold across repeats of one condition. See clumsy_calibration.json - it is reported as a Methods limitation, not used as an instrument.",
+      "measured_from": "publisher"
+    },
+    "held_constant": {
+      "subscription_name": "mysub",
+      "copy_data": false,
+      "streaming": "off",
+      "binary": false,
+      "synchronous_commit": "off",
+      "publisher": "unchanged, centralus",
+      "active_slots_during_run": 1
+    },
+    "hardware": {
+      "vm_size": "Standard_D8ads_v6",
+      "data_disk_caching": "None",
+      "measured_apply_mbps": null,
+      "offered_load_mbps": 6,
+      "headroom_x": null,
+      "duration_sec": 360,
+      "duration_is_paper_default": true,
+      "how_measured": "preflight_region.py, run ON THIS SUBSCRIBER before the campaign. It requires at least 4x the offered load and refuses to give a GO below that.",
+      "note": "VM sizes are not identical across regions - see subscriber_hardware in the campaign record and the Methods limitation. vCPU count (8) and memory (32 GiB) ARE identical; the generation and processor family are not. Every other software-side quantity in held_constant above IS identical and was verified per region by preflight_region.py."
+    },
+    "levels": [
+      {
+        "clients": 16,
+        "rows_per_commit": 1,
+        "row_bytes": 1000,
+        "target_wal_mbps": 6,
+        "duration_sec": 360,
+        "level_id": "F01",
+        "label": "0.1 ms real RTT @ 6 MB/s (centralus)",
+        "network_latency_ms": 0.1
+      }
+    ]
+  },
+  "script_sha256": {
+    "orchestrate.py": "36366fb8885157ab7df1fc3e978fa399c41de39dd735e8d3cacddbb3609dc4b0",
+    "loadgen.py": "3ecb199b8559be05fad3779cc050d18720b46fc51daefabada104d9aaf4379dc",
+    "monitor.py": "7815a896fecdc878208b670ba6d1f095a3a05f02e11ec41f49c5d4faa9c08865"
+  },
+  "order_seed": null,
+  "options": {
+    "duration": 360.0,
+    "drain_timeout": 3600.0,
+    "on_error": "abort",
+    "max_sql_errors": 10,
+    "strict_setpoint": false,
+    "setpoint_tol": 0.15,
+    "load_grace": 300.0,
+    "min_free_gb": 50.0,
+    "data_volume": "F:\\",
+    "run_suffix": "",
+    "out": "C:\\r3\\data",
+    "loadgen": "C:\\r3\\scripts\\loadgen.py",
+    "drain_threshold_bytes": 1048576,
+    "drain_consecutive_polls": 10,
+    "settle_after_drain_sec": 20,
+    "apply_rate_min_backlog_bytes": 104857600,
+    "apply_rate_min_catchup_sec": 5.0,
+    "capacity_slope_bytes_per_sec": 200000,
+    "capacity_min_backlog_bytes": 33554432
+  },
+  "resumed": false,
+  "results": [
+    {
+      "level_id": "F01",
+      "label": "0.1 ms real RTT @ 6 MB/s (centralus)",
+      "order_index": 1,
+      "started_utc": "2026-09-13T21:15:35.556812+00:00",
+      "finished_utc": "2026-09-13T21:22:16.896508+00:00",
+      "loadgen_seed": 2028,
+      "loadgen_command": [
+        "C:\\r3\\scripts\\loadgen.py",
+        "--dsn",
+        "host=10.0.1.4 port=5432 dbname=pub user=postgres password=******** connect_timeout=20",
+        "--clients",
+        "16",
+        "--rows-per-commit",
+        "1",
+        "--row-bytes",
+        "1000",
+        "--duration",
+        "360",
+        "--op-mix",
+        "insert",
+        "--out",
+        "C:\\r3\\data",
+        "--level-id",
+        "F01",
+        "--seed",
+        "2028",
+        "--max-sql-errors",
+        "10",
+        "--target-wal-mbps",
+        "6"
+      ],
+      "params": {
+        "clients": 16,
+        "rows_per_commit": 1,
+        "row_bytes": 1000,
+        "target_wal_mbps": 6,
+        "network_latency_ms": 0.1,
+        "clumsy_lag_ms": null,
+        "op_mix": "insert",
+        "duration_sec": 360,
+        "commit_rate": null,
+        "unthrottled": false
+      },
+      "latency_gate": null,
+      "started_clean": true,
+      "pre_drain": {
+        "drained": true,
+        "drain_sec": 10.0,
+        "catchup_sec": 1.0,
+        "confirm_sec": 9.02,
+        "start_backlog_bytes": 0,
+        "peak_backlog_bytes": 0,
+        "apply_rate_measurable": false,
+        "apply_rate_bytes_per_sec": null,
+        "apply_rate_mb_per_sec": null
+      },
+      "load_seconds": 360.9,
+      "wal_bytes_generated": 2269561536,
+      "measured_wal_mb_per_sec": 5.997,
+      "loadgen_measured_wal_mb_per_sec": 6.003,
+      "publisher_rows_before": 0,
+      "subscriber_rows_before": 0,
+      "lag_series": [
+        [
+          0.5,
+          0
+        ],
+        [
+          2.5,
+          8376
+        ],
+        [
+          4.5,
+          1089600
+        ],
+        [
+          6.52,
+          9456
+        ],
+        [
+          8.52,
+          9352
+        ],
+        [
+          10.52,
+          1147912
+        ],
+        [
+          12.52,
+          8880
+        ],
+        [
+          14.52,
+          1060200
+        ],
+        [
+          16.52,
+          8880
+        ],
+        [
+          18.52,
+          9016
+        ],
+        [
+          20.53,
+          83096
+        ],
+        [
+          22.53,
+          9872
+        ],
+        [
+          24.53,
+          440
+        ],
+        [
+          26.53,
+          9192
+        ],
+        [
+          28.53,
+          9048
+        ],
+        [
+          30.53,
+          11440
+        ],
+        [
+          32.53,
+          1800
+        ],
+        [
+          34.55,
+          11296
+        ],
+        [
+          36.55,
+          12248
+        ],
+        [
+          38.55,
+          1073392
+        ],
+        [
+          40.55,
+          1065800
+        ],
+        [
+          42.55,
+          9128
+        ],
+        [
+          44.55,
+          8296
+        ],
+        [
+          46.55,
+          6232
+        ],
+        [
+          48.56,
+          8696
+        ],
+        [
+          50.56,
+          9384
+        ],
+        [
+          52.56,
+          8136
+        ],
+        [
+          54.56,
+          1109608
+        ],
+        [
+          56.56,
+          8232
+        ],
+        [
+          58.56,
+          8440
+        ],
+        [
+          60.56,
+          1107352
+        ],
+        [
+          62.58,
+          83136
+        ],
+        [
+          64.58,
+          10824
+        ],
+        [
+          66.58,
+          10240
+        ],
+        [
+          68.58,
+          8936
+        ],
+        [
+          70.58,
+          5224
+        ],
+        [
+          72.58,
+          9616
+        ],
+        [
+          74.58,
+          8368
+        ],
+        [
+          76.58,
+          7784
+        ],
+        [
+          78.59,
+          8344
+        ],
+        [
+          80.59,
+          10072
+        ],
+        [
+          82.59,
+          6312
+        ],
+        [
+          84.59,
+          5168
+        ],
+        [
+          86.59,
+          4640
+        ],
+        [
+          88.59,
+          9232
+        ],
+        [
+          90.59,
+          15408
+        ],
+        [
+          92.61,
+          7856
+        ],
+        [
+          94.61,
+          8560
+        ],
+        [
+          96.61,
+          7800
+        ],
+        [
+          98.61,
+          216
+        ],
+        [
+          100.61,
+          11088
+        ],
+        [
+          102.61,
+          9184
+        ],
+        [
+          104.62,
+          12544
+        ],
+        [
+          106.62,
+          98840
+        ],
+        [
+          108.62,
+          10960
+        ],
+        [
+          110.62,
+          8664
+        ],
+        [
+          112.62,
+          16960
+        ],
+        [
+          114.62,
+          1071208
+        ],
+        [
+          116.62,
+          12696
+        ],
+        [
+          118.62,
+          10400
+        ],
+        [
+          120.64,
+          12312
+        ],
+        [
+          122.64,
+          8040
+        ],
+        [
+          124.64,
+          8448
+        ],
+        [
+          126.64,
+          7920
+        ],
+        [
+          128.64,
+          9376
+        ],
+        [
+          130.64,
+          7760
+        ],
+        [
+          132.66,
+          1105920
+        ],
+        [
+          134.66,
+          9552
+        ],
+        [
+          136.66,
+          8120
+        ],
+        [
+          138.67,
+          6640
+        ],
+        [
+          140.67,
+          9096
+        ],
+        [
+          142.67,
+          9648
+        ],
+        [
+          144.67,
+          8648
+        ],
+        [
+          146.67,
+          1088072
+        ],
+        [
+          148.67,
+          9856
+        ],
+        [
+          150.67,
+          9832
+        ],
+        [
+          152.69,
+          13928
+        ],
+        [
+          154.69,
+          7848
+        ],
+        [
+          156.69,
+          7976
+        ],
+        [
+          158.69,
+          1090000
+        ],
+        [
+          160.69,
+          10784
+        ],
+        [
+          162.7,
+          9648
+        ],
+        [
+          164.7,
+          1090736
+        ],
+        [
+          166.7,
+          17584
+        ],
+        [
+          168.7,
+          9480
+        ],
+        [
+          170.7,
+          15032
+        ],
+        [
+          172.7,
+          107696
+        ],
+        [
+          174.7,
+          17928
+        ],
+        [
+          176.72,
+          10208
+        ],
+        [
+          178.72,
+          9016
+        ],
+        [
+          180.72,
+          663640
+        ],
+        [
+          182.72,
+          57376
+        ],
+        [
+          184.72,
+          8488
+        ],
+        [
+          186.72,
+          9144
+        ],
+        [
+          188.73,
+          10080
+        ],
+        [
+          190.73,
+          58472
+        ],
+        [
+          192.73,
+          1106480
+        ],
+        [
+          194.73,
+          8840
+        ],
+        [
+          196.73,
+          1272
+        ],
+        [
+          198.73,
+          10272
+        ],
+        [
+          200.73,
+          8544
+        ],
+        [
+          202.75,
+          13648
+        ],
+        [
+          204.75,
+          528368
+        ],
+        [
+          206.75,
+          7816
+        ],
+        [
+          208.75,
+          9704
+        ],
+        [
+          210.75,
+          8360
+        ],
+        [
+          212.75,
+          1192
+        ],
+        [
+          214.75,
+          10848
+        ],
+        [
+          216.77,
+          10888
+        ],
+        [
+          218.77,
+          1111064
+        ],
+        [
+          220.77,
+          10920
+        ],
+        [
+          222.77,
+          28648
+        ],
+        [
+          224.77,
+          1091816
+        ],
+        [
+          226.77,
+          10200
+        ],
+        [
+          228.77,
+          9256
+        ],
+        [
+          230.78,
+          1099944
+        ],
+        [
+          232.78,
+          9296
+        ],
+        [
+          234.78,
+          33088
+        ],
+        [
+          236.78,
+          1077208
+        ],
+        [
+          238.78,
+          1097736
+        ],
+        [
+          240.78,
+          12304
+        ],
+        [
+          242.78,
+          10528
+        ],
+        [
+          244.8,
+          12496
+        ],
+        [
+          246.8,
+          9024
+        ],
+        [
+          248.8,
+          8192
+        ],
+        [
+          250.8,
+          1059272
+        ],
+        [
+          252.8,
+          9872
+        ],
+        [
+          254.8,
+          9528
+        ],
+        [
+          256.8,
+          21896
+        ],
+        [
+          258.81,
+          9368
+        ],
+        [
+          260.81,
+          8248
+        ],
+        [
+          262.81,
+          8568
+        ],
+        [
+          264.81,
+          8616
+        ],
+        [
+          266.81,
+          13664
+        ],
+        [
+          268.81,
+          19256
+        ],
+        [
+          270.81,
+          8520
+        ],
+        [
+          272.83,
+          12432
+        ],
+        [
+          274.83,
+          11744
+        ],
+        [
+          276.83,
+          10744
+        ],
+        [
+          278.83,
+          8488
+        ],
+        [
+          280.83,
+          15304
+        ],
+        [
+          282.83,
+          8464
+        ],
+        [
+          284.83,
+          1084872
+        ],
+        [
+          286.83,
+          10152
+        ],
+        [
+          288.84,
+          10256
+        ],
+        [
+          290.84,
+          1081440
+        ],
+        [
+          292.84,
+          8264
+        ],
+        [
+          294.84,
+          5704
+        ],
+        [
+          296.84,
+          4736
+        ],
+        [
+          298.84,
+          6216
+        ],
+        [
+          300.84,
+          4728
+        ],
+        [
+          302.86,
+          9192
+        ],
+        [
+          304.86,
+          27568
+        ],
+        [
+          306.86,
+          25784
+        ],
+        [
+          308.86,
+          9664
+        ],
+        [
+          310.86,
+          7880
+        ],
+        [
+          312.86,
+          9040
+        ],
+        [
+          314.86,
+          24608
+        ],
+        [
+          316.88,
+          11176
+        ],
+        [
+          318.88,
+          9432
+        ],
+        [
+          320.88,
+          1083960
+        ],
+        [
+          322.88,
+          1097976
+        ],
+        [
+          324.88,
+          9568
+        ],
+        [
+          326.88,
+          7816
+        ],
+        [
+          328.88,
+          1081800
+        ],
+        [
+          330.89,
+          9560
+        ],
+        [
+          332.89,
+          10400
+        ],
+        [
+          334.89,
+          427344
+        ],
+        [
+          336.89,
+          8912
+        ],
+        [
+          338.89,
+          9448
+        ],
+        [
+          340.89,
+          9480
+        ],
+        [
+          342.91,
+          542304
+        ],
+        [
+          344.91,
+          8392
+        ],
+        [
+          346.91,
+          7856
+        ],
+        [
+          348.91,
+          8504
+        ],
+        [
+          350.91,
+          1090144
+        ],
+        [
+          352.91,
+          17056
+        ],
+        [
+          354.92,
+          18056
+        ],
+        [
+          356.92,
+          1093032
+        ],
+        [
+          358.92,
+          9184
+        ]
+      ],
+      "lag_growth_bytes_per_sec": 2159.5,
+      "peak_lag_during_load_bytes": 1147912,
+      "setpoint_error_pct": -0.0,
+      "lag_at_load_end_bytes": 0,
+      "post_drain": {
+        "drained": true,
+        "drain_sec": 10.0,
+        "catchup_sec": 1.0,
+        "confirm_sec": 9.01,
+        "start_backlog_bytes": 0,
+        "peak_backlog_bytes": 0,
+        "apply_rate_measurable": false,
+        "apply_rate_bytes_per_sec": null,
+        "apply_rate_mb_per_sec": null
+      },
+      "exceeded_capacity": false,
+      "exceeded_capacity_basis": "mean_backlog_over_load_tail",
+      "loadgen": {
+        "completed_commits": 1453061,
+        "completed_rows_inserted": 1453061,
+        "achieved_commits_per_sec": 4029.98,
+        "achieved_rows_per_sec": 4029.98,
+        "sql_errors": 0,
+        "reconnects": 0,
+        "workers_started": 16,
+        "workers_min_alive": 16,
+        "controller_started": true,
+        "on_target": true,
+        "setpoint_error_frac": 0.0002,
+        "control": {
+          "samples": 180,
+          "steady_mean_mbps": 6.001,
+          "steady_stdev_mbps": 0.24,
+          "steady_min_mbps": 5.57,
+          "steady_max_mbps": 7.229,
+          "final_commit_budget": 4067.07,
+          "at_rail_fraction": 0.0
+        }
+      }
+    }
+  ],
+  "preflight": [
+    [
+      "postgres_version",
+      "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35",
+      true
+    ],
+    [
+      "wal_level",
+      "logical",
+      true
+    ],
+    [
+      "table_exists",
+      "public.ingest_data",
+      true
+    ],
+    [
+      "replication_active",
+      "pg_stat_replication row",
+      true
+    ],
+    [
+      "slot_status",
+      "reserved active=True",
+      true
+    ],
+    [
+      "free_space_gb",
+      "978.3",
+      true
+    ],
+    [
+      "loadgen_present",
+      "C:\\r3\\scripts\\loadgen.py",
+      true
+    ]
+  ],
+  "pg_settings": {
+    "checkpoint_timeout": "900 s",
+    "full_page_writes": "on",
+    "max_replication_slots": "10",
+    "max_wal_senders": "10",
+    "max_wal_size": "16384 MB",
+    "min_wal_size": "2048 MB",
+    "server_version": "18.6",
+    "shared_buffers": "1048576 8kB",
+    "synchronous_commit": "off",
+    "track_io_timing": "on",
+    "track_wal_io_timing": "on",
+    "wal_compression": "off",
+    "wal_keep_size": "8192 MB",
+    "wal_level": "logical"
+  },
+  "subscriber": {
+    "reachable": true,
+    "version_string": "PostgreSQL 18.6 on x86_64-windows, compiled by msvc-19.44.35228, 64-bit",
+    "server_version": "18.6",
+    "settings": {
+      "checkpoint_timeout": "900 s",
+      "effective_cache_size": "3145728 8kB",
+      "full_page_writes": "on",
+      "logical_decoding_work_mem": "65536 kB",
+      "maintenance_work_mem": "2097152 kB",
+      "max_logical_replication_workers": "4",
+      "max_parallel_apply_workers_per_subscription": "2",
+      "max_sync_workers_per_subscription": "2",
+      "max_wal_size": "16384 MB",
+      "max_worker_processes": "16",
+      "shared_buffers": "1048576 8kB",
+      "synchronous_commit": "off",
+      "track_io_timing": "on",
+      "wal_level": "logical",
+      "wal_receiver_timeout": "60000 ms"
+    },
+    "indexes": [
+      "idx_ingest_account",
+      "idx_ingest_created",
+      "idx_ingest_status_rc",
+      "ingest_data_pkey"
+    ],
+    "subscriptions": [
+      {
+        "subname": "mysub",
+        "enabled": true,
+        "streaming": "f",
+        "binary": false,
+        "synchronous_commit": "off"
+      }
+    ],
+    "rows": 1438040
+  },
+  "finished_utc": "2026-09-13T21:22:16.899507+00:00"
+}

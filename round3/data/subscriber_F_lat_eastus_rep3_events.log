@@ -1,0 +1,3 @@
+2026-09-13T21:43:43.059567+00:00	RUN	now recording run_id=F_lat_eastus_rep3 -> C:\r3\data\subscriber_F_lat_eastus_rep3.csv
+2026-09-13T21:43:43.064508+00:00	LEVEL	F01 -> idle (state=idle)
+2026-09-13T21:43:46.060676+00:00	LEVEL	idle -> F01 (state=drain)

@@ -1,0 +1,66 @@
+{
+  "family": "C_batching",
+  "description": "Reviewer major issue 7a. Measured WAL held at 16 MB/s while rows-per-commit steps 1 to 1000; the controller lowers the commit rate proportionally. 16 MB/s is set by the SMALLEST batch: calibration level A07 showed the publisher tops out at 23.4 MB/s at one row per commit, so 16 MB/s is the highest rate every level in this family can actually hold with headroom for the loop to correct. It sits below the apply knee (~38 MB/s), which is deliberate - it isolates the effect of grouping from the effect of saturation.",
+  "levels": [
+    {
+      "level_id": "C01",
+      "label": "1 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "C02",
+      "label": "10 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 10,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "C03",
+      "label": "50 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 50,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "C04",
+      "label": "100 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 100,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "C05",
+      "label": "500 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 500,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    },
+    {
+      "level_id": "C06",
+      "label": "1000 rows/commit @ 16 MB/s",
+      "clients": 16,
+      "rows_per_commit": 1000,
+      "row_bytes": 1000,
+      "target_wal_mbps": 16,
+      "duration_sec": 360
+    }
+  ],
+  "retargeted_from_calibration": {
+    "source": "A_calibration_rep1",
+    "previous_target_mbps": 45,
+    "new_target_mbps": 16,
+    "publisher_ceiling_note": "see matrix_P_probe.json"
+  }
+}

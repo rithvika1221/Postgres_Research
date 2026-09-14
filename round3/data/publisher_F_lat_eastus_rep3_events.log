@@ -1,0 +1,6 @@
+2026-09-13T21:43:40.049952+00:00	RUN	now recording run_id=F_lat_eastus_rep3 -> C:\r3\data\publisher_F_lat_eastus_rep3.csv
+2026-09-13T21:43:40.050951+00:00	LEVEL	F01 -> idle (state=idle)
+2026-09-13T21:43:45.056500+00:00	LEVEL	idle -> F01 (state=drain)
+2026-09-13T21:50:25.437928+00:00	LEVEL	F01 -> idle (state=idle)
+2026-09-13T21:50:26.438531+00:00	STOP	stop file present
+2026-09-13T21:50:26.438531+00:00	SUMMARY	samples=1218 elapsed=1219s events={"START": 1, "WAL_TIMING_MODE": 1, "DB_CONNECTED": 1, "RUN": 4, "LEVEL": 7, "REPL_STATE": 1, "SLOT_STATUS": 1, "STOP": 1}
